@@ -1,0 +1,175 @@
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1%;
+  width: 98%;
+  margin: auto;
+  grid-auto-rows: 1fr;
+}
+
+.grid-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.title {
+  background-color: #78B3CE;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  font-weight: bold;
+  
+}
+
+.grid-content {
+  background-color: #ffffff;
+  color: #000000;
+  text-align: center;
+  padding: 20px;
+  border: 1px solid #dee2e6;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-size: large;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .grid-container {
+    grid-template-columns: 1fr;
+  }
+
+  .grid-item {
+    margin-bottom: 10px;
+  }
+}
+
+h2 {
+  font-size: 50px;
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+#plate-object-form {
+  width: 100%;
+  height: 90%;
+  text-align: left;
+  margin: 0;
+  padding: 20px;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#plate-object-form .field {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+#plate-object-form label {
+  font-size: 1rem;
+  margin-bottom: 5px;
+}
+
+#plate-object-form input,
+#plate-object-form select {
+  width: 80%;
+  padding: 10px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+#plate-object-form small {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.num {
+  display: inline-block;
+  border: 1px solid #ccc;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  line-height: 50px;
+  box-sizing: border-box;
+}
+
+svg {
+  border-radius: 50%;
+  width: 80%;
+  height: auto;
+  display: inline-block;
+}
+
+#myPlot {
+  width: 100% !important;
+  height: calc(100vh - 350px) !important; /* Set height based on the viewport height minus padding */
+  margin: 0 auto;
+  border: 1px solid #ccc;
+  border-radius: 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  position: relative;
+  min-height: 300px; /* Ensure the plot doesn't become too small on narrow screens */
+}
+
+@media (max-width: 768px) {
+  #myPlot {
+    height: 50vh; /* Adjust for smaller screens */
+    min-height: 200px;
+  }
+}
+.plotly .modebar {
+  display: none !important;
+}
+
+.main-svg {
+  height: fit-content;
+  width: fit-content;
+  border-radius: 0;
+}
+
+.plot-button-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px 0;
+  align-items: center; /* Align items vertically */
+
+}
+
+.plot-button-container label {
+  font-size: 1rem; /* Ensure consistent font size */
+}
+
+.plot-button-container select {
+  font-size: 1rem; /* Ensure consistent font size */
+  padding: 5px; /* Add padding for better appearance */
+  box-sizing: border-box;
+}
+
+#image-input {
+  margin-top: 20px;
+}
+
+.image-container-cv {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: flex-start;
+  height: auto;
+  width: auto;
+}
+
+.image-box {
+  text-align: center;
+}
+
+canvas {
+  width: 100%;
+  height: 100%;
+}

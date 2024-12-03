@@ -1,0 +1,174 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="index.css" />
+
+    <link rel="stylesheet" href="nav-bar.css" />
+    <link rel="stylesheet" href="website-wide-styling.css" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="logo">
+        <a href="index.html"> coliicount</a>
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html">About</a></li>
+
+        <li><a href="analytics.html">Analytics</a></li>
+        <li><a href="data-download.html">Data Download</a></li>
+      </ul>
+      <div class="hamburger" id="hamburger">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </div>
+    </nav>
+
+    <div class="grid-container">
+      <div class="grid-item">
+        <div class="about-tabs">
+          <div class="about-tab active" data-target="analytics">Analytics</div>
+          <div class="about-tab" data-target="data-download">Data Download</div>
+          <div class="about-tab" data-target="future-plans">Future Plans</div>
+        </div>
+
+        <div class="grid-content">
+          <div id="analytics" class="about-tab-content active">
+            <div class="container-home">
+              <h2 class="subtitle-home">Analytics</h2>
+              <div class="content-home">
+                <div class="text-home">
+                  <ul>
+                    <li>
+                      <strong>Laboratory Data Processing:</strong>
+                      streamline microbial colony analysis with a comprehensive
+                      solution
+                    </li>
+                    <li>
+                      <strong>Flexible Data Entry</strong>
+
+                      <ul>
+                        <li>Manual input method</li>
+                        <li>
+                          Automated counting via computer vision (OpenCV
+                          integration)
+                        </li>
+                      </ul>
+                    </li>
+                    <li>
+                      <strong>Advanced Visualization:</strong>
+                      interactive dashboard built with Plotly, enabling
+                      real-time analysis of colony growth patterns
+                    </li>
+                  </ul>
+                </div>
+                <img
+                  class="image-home"
+                  src="images/ColiiCount.jpg"
+                  alt="Descriptive Alt Text"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div id="data-download" class="about-tab-content">
+            <div class="container-home">
+              <h2 class="subtitle-home">Data Download</h2>
+              <div class="content-home">
+                <div class="text-home">
+                  <ul>
+                    <li>
+                      <strong>Real Time Data Querying:</strong>
+                      search functionality allows for user to search subset of
+                      data by various environmental conditions or scientific
+                      name.
+                    </li>
+                    <li>
+                      <strong>Flexible Data Download:</strong>
+                      once a subset of data is selected the user can download
+                      the data conveniently to a csv file.
+                    </li>
+                    <li>
+                      <strong>Research Insights:</strong>
+                      provides researchers with valuable, data-driven
+                      observations
+                    </li>
+                  </ul>
+                </div>
+
+                <img
+                  class="image-home"
+                  src="images/ColiiCount.jpg"
+                  alt="Descriptive Alt Text"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div id="future-plans" class="about-tab-content">
+            <div class="container-home">
+              <h2 class="subtitle-home">Future Plans</h2>
+              <div class="content-home">
+                <div class="text-home">
+                  <ul>
+                    <li>
+                      <strong>Improved Computer Vision Accuracy:</strong>
+                      train the existing OpenCV functionality on a dataset to
+                      improve colony identification.
+                    </li>
+                    <li>
+                      <strong>Improved Colony Resolution:</strong>
+                      allow user to select what type of bacteria they want to
+                      count and identify only the bacteria that match that
+                      morphology.
+                    </li>
+                    <li>
+                      <strong>Confidence Measurement:</strong>
+                      provide some metric for our tools confidence in the count
+                      produced.
+                    </li>
+                  </ul>
+                </div>
+                <img
+                  class="image-home"
+                  src="images/ColiiCount.jpg"
+                  alt="Descriptive Alt Text"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Tab switching logic
+      const tabs = document.querySelectorAll(".about-tab");
+      const tabContents = document.querySelectorAll(".about-tab-content");
+
+      tabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+          // Remove active class from all tabs and contents
+          tabs.forEach((t) => t.classList.remove("active"));
+          tabContents.forEach((content) => content.classList.remove("active"));
+
+          // Add active class to clicked tab and corresponding content
+          tab.classList.add("active");
+          const target = document.getElementById(
+            tab.getAttribute("data-target")
+          );
+          target.classList.add("active");
+        });
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+    <script src="data-download.js"></script>
+    <script src="db.js"></script>
+
+    <script src="nav-bar.js"></script>
+  </body>
+</html>

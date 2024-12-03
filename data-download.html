@@ -1,0 +1,95 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="data-download.css" />
+    <link rel="stylesheet" href="nav-bar.css" />
+    <link rel="stylesheet" href="website-wide-styling.css" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="logo">
+        <a href="index.html">coliicount</a>
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html">About</a></li>
+
+        <li><a href="analytics.html">Analytics</a></li>
+        <li><a href="data-download.html">Data Download</a></li>
+      </ul>
+      <div class="hamburger" id="hamburger">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </div>
+    </nav>
+
+    <div class="grid-container">
+      <div class="grid-item">
+        <div class="title">Data History Download</div>
+        <div class="search-container">
+          <div class="search-container-div">
+            <input
+              class="search-input"
+              type="number"
+              placeholder="Search EID number..."
+              name="search"
+              id="search-eid"
+            />
+            <input
+              type="number"
+              class="search-input"
+              id="temperature-search"
+              name="temperature"
+              placeholder="Temperature (°C)"
+            />
+            <input
+              type="text"
+              class="search-input"
+              id="scientific-name-search"
+              name="scientific-name"
+              placeholder="Genus and Species"
+            />
+
+            <select class="search-input" id="nutrition-search" name="nutrition">
+              <option value="">Choose Agar...</option>
+              <option value="blood">Blood Agar</option>
+              <option value="chocolate">Chocolate Agar</option>
+              <option value="thayer-martin">Thayer-Martin Agar</option>
+            </select>
+            <input
+              class="search-input"
+              type="number"
+              id="pressure-search"
+              name="pressure"
+              placeholder="Incubation Pressure"
+            />
+            <input
+              class="search-input"
+              type="number"
+              id="duration-search"
+              name="duration"
+              placeholder="Incubation Duration"
+            />
+            <button class="blue-btn" onclick="visualizePlateObjects()">
+              <i class="fa fa-search"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p id="data-table"></p>
+    <button class="green-btn" id="download-btn" onclick="downloadExcelFile()">
+      DOWNLOAD
+    </button>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+    <script src="data-download.js"></script>
+    <script src="db.js"></script>
+
+    <script src="nav-bar.js"></script>
+  </body>
+</html>
