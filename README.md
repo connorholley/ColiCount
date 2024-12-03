@@ -17,11 +17,16 @@ MySQL: Ensure you have MySQL installed and running. You can download it here.
 
 ## Set Up
 Create a .env file in the root of your project. Use the example below as a template:
-DB_HOST=localhost
-DB_USER=root
-DB_PASSWORD=your_password
-DB_NAME=colicount_db
-PORT=3000
+
+`DB_HOST=localhost`
+
+`DB_USER=root`
+
+`DB_PASSWORD=your_password`
+
+`DB_NAME=colicount_db`
+
+`PORT=3000`
 
 ## Create Table
 Execute sql in plates-table.sql
