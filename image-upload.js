@@ -11,12 +11,13 @@ let processedCtx = processedCanvas.getContext("2d");
 
 document.addEventListener("DOMContentLoaded", () => {
   const processButton = document.getElementById("processButton");
-
   let imgElement = new Image();
 
   // Handle file input change
   imageInput.addEventListener("change", (event) => {
     const file = event.target.files[0];
+
+    // Reset colony count and clear processed canvas
     colonyCount = 0;
     processedCtx.clearRect(0, 0, processedCanvas.width, processedCanvas.height);
 
@@ -31,10 +32,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // When the image loads, draw it on the original canvas
   imgElement.onload = () => {
-    // Set canvas size to the image size
     originalCanvas.width = imgElement.width;
     originalCanvas.height = imgElement.height;
-    // Draw the original image on the canvas
     originalCtx.drawImage(imgElement, 0, 0);
   };
 
@@ -45,23 +44,27 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // Convert the canvas to OpenCV Mat
-    const src = cv.imread(originalCanvas);
-    const gray = new cv.Mat();
-    const blurred = new cv.Mat();
-    const binary = new cv.Mat();
+    // Reset colony count before processing
+    colonyCount = 0;
+
+    // Create OpenCV matrices to manage image processing
+    const matrices = {
+      src: cv.imread(originalCanvas),
+      gray: new cv.Mat(),
+      blurred: new cv.Mat(),
+      binary: new cv.Mat(),
+      colorImg: new cv.Mat(),
+      contours: new cv.MatVector(),
+      hierarchy: new cv.Mat(),
+    };
 
     try {
-      // Convert to grayscale
-      cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY);
-
-      // Apply Gaussian Blur to reduce noise
-      cv.GaussianBlur(gray, blurred, new cv.Size(5, 5), 0);
-
-      // Apply adaptive thresholding (more flexible for varying lighting)
+      // Image preprocessing steps
+      cv.cvtColor(matrices.src, matrices.gray, cv.COLOR_RGBA2GRAY);
+      cv.GaussianBlur(matrices.gray, matrices.blurred, new cv.Size(5, 5), 0);
       cv.adaptiveThreshold(
-        blurred,
-        binary,
+        matrices.blurred,
+        matrices.binary,
         255,
         cv.ADAPTIVE_THRESH_GAUSSIAN_C,
         cv.THRESH_BINARY,
@@ -69,89 +72,78 @@ document.addEventListener("DOMContentLoaded", () => {
         2
       );
 
-      // Apply morphological operations (to remove small noise and fill gaps)
+      // Morphological operations to reduce noise
       const kernel = cv.Mat.ones(3, 3, cv.CV_8U);
-      cv.morphologyEx(binary, binary, cv.MORPH_CLOSE, kernel); // Closing operation to join broken colonies
-      cv.morphologyEx(binary, binary, cv.MORPH_OPEN, kernel); // Opening operation to remove small noise
+      cv.morphologyEx(matrices.binary, matrices.binary, cv.MORPH_CLOSE, kernel);
+      cv.morphologyEx(matrices.binary, matrices.binary, cv.MORPH_OPEN, kernel);
 
-      // Find contours and hierarchy
-      const contours = new cv.MatVector();
-      const hierarchy = new cv.Mat();
+      // Find contours
       cv.findContours(
-        binary,
-        contours,
-        hierarchy,
-        cv.RETR_CCOMP, // Use CCOMP retrieval mode to find both external and internal contours
+        matrices.binary,
+        matrices.contours,
+        matrices.hierarchy,
+        cv.RETR_CCOMP,
         cv.CHAIN_APPROX_SIMPLE
       );
 
-      // Convert the grayscale image to BGR to allow color drawing
-      const colorImg = new cv.Mat();
-      cv.cvtColor(src, colorImg, cv.COLOR_RGBA2BGR);
+      // Prepare color image for drawing
+      cv.cvtColor(matrices.src, matrices.colorImg, cv.COLOR_RGBA2BGR);
 
-      // Filter contours based on area and shape
-      const minArea = 5; // Minimum area threshold for colonies
+      // Colony detection parameters
+      const MIN_AREA = 5;
+      const MIN_CIRCULARITY = 0.1;
 
-      // Loop through the contours and filter out the plate contour (largest external contour)
-      for (let i = 0; i < contours.size(); i++) {
-        const contour = contours.get(i);
+      // Detect and mark colonies
+      for (let i = 0; i < matrices.contours.size(); i++) {
+        const contour = matrices.contours.get(i);
         const area = cv.contourArea(contour);
 
         // Get the hierarchy for the current contour
-        const h = hierarchy.data32S;
-        const parentContourIndex = h[i * 4 + 3]; // Index of parent contour
+        const h = matrices.hierarchy.data32S;
+        const parentContourIndex = h[i * 4 + 3];
 
-        // Skip external contours (the plate) by checking if it has no parent (i.e., it is a root contour)
-        if (parentContourIndex === -1) {
-          continue; // Skip the plate contour
-        }
+        // Skip external contours (plate)
+        if (parentContourIndex === -1) continue;
 
-        // Filter based on area (this will help exclude noise or small irrelevant contours)
-        if (area > minArea) {
-          // Optional: further shape filtering (e.g., circularity)
+        // Filter contours based on area
+        if (area > MIN_AREA) {
           const perimeter = cv.arcLength(contour, true);
           const circularity = (4 * Math.PI * area) / (perimeter * perimeter);
 
-          // Only count circular contours (representing colonies)
-          if (circularity > 0.1) {
-            colonyCount++; // Increment if the contour looks like a colony
+          // Count and mark colonies
+          if (circularity > MIN_CIRCULARITY) {
+            colonyCount++;
 
-            const color = new cv.Scalar(0, 255, 0); // Green color for shading (in BGR)
             cv.drawContours(
-              colorImg, // Drawing on the converted BGR image
-              contours,
+              matrices.colorImg,
+              matrices.contours,
               i,
-              color,
-              cv.FILLED, // Use cv.FILLED to fill the contour area
+              new cv.Scalar(0, 255, 0), // Green color
+              cv.FILLED,
               cv.LINE_8,
-              hierarchy,
+              matrices.hierarchy,
               100
             );
           }
         }
       }
 
-      // Display the original image (already on the originalCanvas)
-      cv.imshow(originalCanvas, src);
+      // Display processed images
+      cv.imshow(originalCanvas, matrices.src);
+      cv.imshow(processedCanvas, matrices.colorImg);
 
-      // Display the processed image (on the processedCanvas)
-      cv.imshow(processedCanvas, colorImg);
-
-      // Update the colony count on the HTML page
+      // Update colony count display
       displayColonyCount(colonyCount);
-
-      // Release allocated memory for contours, hierarchy, and color image
-      contours.delete();
-      hierarchy.delete();
-      colorImg.delete();
     } catch (error) {
       console.error("Error during image processing:", error);
+      alert("An error occurred during image processing.");
     } finally {
-      // Ensure all matrices are deleted in the `finally` block
-      src.delete();
-      gray.delete();
-      blurred.delete();
-      binary.delete();
+      // Safely delete all matrices
+      Object.values(matrices).forEach((matrix) => {
+        if (matrix && typeof matrix.delete === "function") {
+          matrix.delete();
+        }
+      });
     }
   });
 });
