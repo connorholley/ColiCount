@@ -32,3 +32,6 @@ Execute sql in plates-table.sql
 
 ## Run Program
 use the command `make` in the parent directory
+
+## OpenCV Integration is still a WIP
+Can test what we do have working with the images that are provided in the images folder just to get an idea of where we are going with it.
