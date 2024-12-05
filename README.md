@@ -7,9 +7,6 @@ Interactive data visualization dashboard.
 CSV export for data portability.
 MySQL database for efficient data storage and retrieval.
 
-## Getting Started
-Follow these steps to set up and run the project locally.
-
 ## Prerequisites
 Node.js: Install the latest version from Node.js downloads.
 npm: Comes bundled with Node.js.
@@ -26,9 +23,9 @@ Create a .env file in the root of your project. Use the example below as a templ
 
 `DB_NAME=colicount_db`
 
-`PORT=3000`
+`PORT=your_db_port`
 
-`SERVER_PORT=3001`
+`SERVER_PORT=your_server_port`
 
 ## Create Table
 Execute sql in plates-table.sql
