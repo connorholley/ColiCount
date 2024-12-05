@@ -1,4 +1,6 @@
-const defaultPort = 3000;
+require("dotenv").config();
+
+const defaultPort = process.env.SERVER_PORT;
 function writeData(sciName, temp, press, duration, plateType, eId, count) {
   fetch(`http://localhost:${defaultPort}/add-plate`, {
     method: "POST",
