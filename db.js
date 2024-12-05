@@ -1,6 +1,11 @@
-require("dotenv").config();
+// need to fix ES6 import
+// import dotenv from "dotenv";
+// dotenv.config();
+// const defaultPort = process.env.SERVER_PORT || 3000;
 
-const defaultPort = process.env.SERVER_PORT;
+// may need to change this depending on what port is being used
+const defaultPort = 3000;
+
 function writeData(sciName, temp, press, duration, plateType, eId, count) {
   fetch(`http://localhost:${defaultPort}/add-plate`, {
     method: "POST",

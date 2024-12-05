@@ -1,8 +1,9 @@
 {
+  "type": "module",
   "dependencies": {
     "@techstark/opencv-js": "^4.10.0-release.1",
     "cors": "^2.8.5",
-    "dotenv": "^16.4.5",
+    "dotenv": "^16.4.7",
     "express": "^4.21.1",
     "just-validate": "^4.3.0",
     "mysql2": "^3.11.4",
