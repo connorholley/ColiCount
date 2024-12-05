@@ -28,6 +28,8 @@ Create a .env file in the root of your project. Use the example below as a templ
 
 `PORT=3000`
 
+`SERVER_PORT=3001`
+
 ## Create Table
 Execute sql in plates-table.sql
 
