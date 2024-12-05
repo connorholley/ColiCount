@@ -23,9 +23,9 @@ Create a .env file in the root of your project. Use the example below as a templ
 
 `DB_NAME=colicount_db`
 
-`PORT=3000`
+`PORT=your_db_port`
 
-`SERVER_PORT=3001`
+`SERVER_PORT=your_server_port`
 
 ## Create Table
 Execute sql in plates-table.sql
