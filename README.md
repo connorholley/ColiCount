@@ -7,9 +7,6 @@ Interactive data visualization dashboard.
 CSV export for data portability.
 MySQL database for efficient data storage and retrieval.
 
-## Getting Started
-Follow these steps to set up and run the project locally.
-
 ## Prerequisites
 Node.js: Install the latest version from Node.js downloads.
 npm: Comes bundled with Node.js.
