@@ -8,9 +8,9 @@ CSV export for data portability.
 MySQL database for efficient data storage and retrieval.
 
 ## Prerequisites
-Node.js: Install the latest version from Node.js downloads.
-npm: Comes bundled with Node.js.
-MySQL: Ensure you have MySQL installed and running. You can download it here.
+Node.js
+npm
+MySQL 
 
 ## Set Up
 Create a .env file in the root of your project. Use the example below as a template:
