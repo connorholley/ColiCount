@@ -30,10 +30,10 @@ validation
   .addField("#nutrition", [
     { rule: "required", errorMessage: "Nutrition selection is required" },
   ])
-  .addField("#experiment-id", [
-    { rule: "required", errorMessage: "Experiment ID is required" },
-    { rule: "number", errorMessage: "Experiment ID must be a valid number" },
-    { rule: "min", value: 1, errorMessage: "Experiment ID must be at least 1" },
+  .addField("#user-id", [
+    { rule: "required", errorMessage: "user ID is required" },
+    { rule: "number", errorMessage: "user ID must be a valid number" },
+    { rule: "min", value: 1, errorMessage: "user ID must be at least 1" },
   ]);
 
 // Optionally, handle form submission only when the form is valid

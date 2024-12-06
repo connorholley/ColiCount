@@ -1,7 +1,6 @@
 <html>
   <head>
     <link rel="stylesheet" href="data-download.css" />
-    <link rel="stylesheet" href="nav-bar.css" />
     <link rel="stylesheet" href="website-wide-styling.css" />
 
     <link
@@ -12,13 +11,14 @@
   <body>
     <nav class="navbar">
       <div class="logo">
-        <a href="index.html">coliicount</a>
+        <a href="about.html">coliicount</a>
       </div>
       <ul class="nav-links">
-        <li><a href="index.html">About</a></li>
+        <li><a href="about.html">About</a></li>
 
         <li><a href="analytics.html">Analytics</a></li>
         <li><a href="data-download.html">Data Download</a></li>
+        <li><a href="#" onclick="logout()">Logout</a></li>
       </ul>
       <div class="hamburger" id="hamburger">
         <span class="bar"></span>
@@ -35,9 +35,9 @@
             <input
               class="search-input"
               type="number"
-              placeholder="Search EID number..."
+              placeholder="Search UID number..."
               name="search"
-              id="search-eid"
+              id="search-uid"
             />
             <input
               type="number"
@@ -87,8 +87,9 @@
       DOWNLOAD
     </button>
     <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
-    <script src="data-download.js"></script>
     <script src="db.js"></script>
+
+    <script src="data-download.js"></script>
 
     <script src="nav-bar.js"></script>
   </body>

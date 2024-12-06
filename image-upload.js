@@ -182,7 +182,7 @@ function createPlateObjectAuto() {
       Pressure: ${pressure.value}
       Duration: ${duration.value}
       Nutrition: ${nutrition.value}
-      Experiment ID: ${eId.value}`);
+      User ID: ${eId.value}`);
 
     // Clear form and reset elements
 

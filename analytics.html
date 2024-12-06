@@ -5,20 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Analytics</title>
     <link rel="stylesheet" href="analytics.css" />
-    <link rel="stylesheet" href="nav-bar.css" />
+
     <link rel="stylesheet" href="website-wide-styling.css" />
   </head>
 
   <body>
     <nav class="navbar">
       <div class="logo">
-        <a href="index.html">coliicount</a>
+        <a href="about.html">coliicount</a>
       </div>
       <ul class="nav-links">
-        <li><a href="index.html">About</a></li>
+        <li><a href="about.html">About</a></li>
 
         <li><a href="analytics.html">Analytics</a></li>
         <li><a href="data-download.html">Data Download</a></li>
+        <li><a href="#" onclick="logout()">Logout</a></li>
       </ul>
       <div class="hamburger" id="hamburger">
         <span class="bar"></span>
@@ -92,18 +93,6 @@
                 <option value="chocolate">Chocolate Agar</option>
                 <option value="thayer-martin">Thayer-Martin Agar</option>
               </select>
-              <small></small>
-            </div>
-
-            <div class="field">
-              <label for="experiment-id">Experiment ID:</label>
-              <input
-                type="number"
-                id="experiment-id"
-                name="experiment-id"
-                placeholder="Experiment ID"
-                required
-              />
               <small></small>
             </div>
           </form>
@@ -202,9 +191,10 @@
       });
     });
   </script>
+  <script src="db.js"></script>
+
   <script src="analytics.js"></script>
   <script src="agar.js"></script>
-  <script src="db.js"></script>
   <script src="nav-bar.js"></script>
   <script src="plot-logic.js"></script>
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>

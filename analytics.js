@@ -7,12 +7,13 @@ let temp = document.getElementById("temperature");
 let pressure = document.getElementById("pressure");
 let duration = document.getElementById("duration");
 let nutrition = document.getElementById("nutrition");
-let eId = document.getElementById("experiment-id");
 
 let count = 0;
 let ones = 0;
 let tens = 0;
 let hundreds = 0;
+
+isLoggedIn();
 
 function increment() {
   count = count + 1;
@@ -51,7 +52,6 @@ function createPlateObject() {
       pressure.value,
       duration.value,
       nutrition.value,
-      eId.value,
       count
     );
 
@@ -62,7 +62,7 @@ function createPlateObject() {
       Pressure: ${pressure.value}
       Duration: ${duration.value}
       Nutrition: ${nutrition.value}
-      Experiment ID: ${eId.value}`);
+      `);
 
     // Clear form and reset elements
 
@@ -91,5 +91,4 @@ function clearFormAndNumbers() {
   pressure.value = null;
   duration.value = null;
   nutrition.value = null;
-  eId.value = null;
 }

@@ -1,10 +1,12 @@
-let searchEId = document.getElementById("search-eid");
+let searchUId = document.getElementById("search-uid");
 let sciName = document.getElementById("scientific-name-search");
 let temp = document.getElementById("temperature-search");
 let pressure = document.getElementById("pressure-search");
 let duration = document.getElementById("duration-search");
 let nutrition = document.getElementById("nutrition-search");
 let query_object = {};
+
+isLoggedIn();
 
 class DataTable {
   constructor(data, targetElementId, rowsPerPage = 10) {
@@ -147,7 +149,7 @@ class DataTable {
 
 async function visualizePlateObjects() {
   let query_fields = {
-    eId: searchEId,
+    uId: searchUId,
     sci_name: sciName,
     temp: temp,
     press: pressure,
@@ -178,7 +180,7 @@ async function visualizePlateObjects() {
     dataTable.renderTable();
   } else {
     // If no data found, display a "No data found" message
-    targetElement.innerHTML = "<p>No data found for the given EID.</p>";
+    targetElement.innerHTML = "<p>No data found for the given User Id.</p>";
     console.log("No valid data available.");
   }
 }
@@ -195,7 +197,7 @@ async function downloadExcelFile() {
 
   today = mm + "/" + dd + "/" + yyyy;
   let filename =
-    "coliform_analytics_" + searchEId.value + "_" + today + ".xlsx";
+    "coliform_analytics_" + searchUId.value + "_" + today + ".xlsx";
 
   try {
     // Convert full data to a worksheet

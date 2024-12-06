@@ -2,6 +2,8 @@ const express = require("express");
 const mysql = require("mysql2");
 const cors = require("cors");
 const portfinder = require("portfinder");
+const jwt = require("jsonwebtoken");
+
 require("dotenv").config();
 
 const app = express();
@@ -27,18 +29,41 @@ connection.connect((err) => {
 });
 
 // Route to add a new plate
-app.post("/add-plate", express.json(), (req, res) => {
-  const { sciName, temp, press, duration, plateType, eId, count } = req.body;
+app.post("/add-plate", authenticateToken, express.json(), (req, res) => {
+  const { sciName, temp, press, duration, plateType, count } = req.body;
+  const uId = req.user.uID;
+  console.log("the u id is ");
+  console.log(uId);
+  console.log(req);
+
+  // Replace undefined values with null
+  const plateData = {
+    sciName: sciName || null,
+    temp: temp || null,
+    press: press || null,
+    duration: duration || null,
+    plateType: plateType || null,
+    uId: uId, // Assuming uId should always be present from the token
+    count: count || null,
+  };
 
   const query = `
     INSERT INTO Plates 
-    (sci_name, temp, press, duration, plate_type, eId, count) 
+    (sci_name, temp, press, duration, plate_type, uId, count) 
     VALUES (?, ?, ?, ?, ?, ?, ?)
   `;
 
   connection.execute(
     query,
-    [sciName, temp, press, duration, plateType, eId, count],
+    [
+      plateData.sciName,
+      plateData.temp,
+      plateData.press,
+      plateData.duration,
+      plateData.plateType,
+      plateData.uId,
+      plateData.count,
+    ],
     (err, results) => {
       if (err) {
         console.error("Error inserting data:", err.stack);
@@ -52,11 +77,12 @@ app.post("/add-plate", express.json(), (req, res) => {
 });
 
 // route to get plate info, defaults to showing all, dynamically adds where clauses based on whats passed to it
+
 // see getData in db.js for more info
-app.get("/get-plates", (req, res) => {
+app.get("/get-plates", authenticateToken, (req, res) => {
+  const uId = req.user.uID;
   // Extract query parameters
-  const { pId, eId, sci_name, temp, press, duration, plate_type, count } =
-    req.query;
+  const { pId, sci_name, temp, press, duration, plate_type, count } = req.query;
 
   let query = "SELECT * FROM Plates";
   const queryParams = [];
@@ -67,9 +93,9 @@ app.get("/get-plates", (req, res) => {
     conditions.push("pID = ?");
     queryParams.push(pId);
   }
-  if (eId) {
-    conditions.push("eId = ?");
-    queryParams.push(eId);
+  if (uId) {
+    conditions.push("uId = ?");
+    queryParams.push(uId);
   }
   if (sci_name) {
     conditions.push("sci_name = ?");
@@ -112,6 +138,71 @@ app.get("/get-plates", (req, res) => {
   });
 });
 
+app.get("/get-users", (req, res) => {
+  const { user_name } = req.query;
+
+  let query = "SELECT * FROM Users";
+  const queryParams = [];
+
+  if (user_name) {
+    query += " WHERE user_name = ?";
+    queryParams.push(user_name);
+  }
+
+  console.log("SQL Query:", query);
+  console.log("Query Parameters:", queryParams);
+
+  connection.query(query, queryParams, (err, results) => {
+    if (err) {
+      console.error("Error fetching users:", err.stack);
+      return res.status(500).json({ error: "Database error" });
+    }
+    res.status(200).json(results);
+  });
+});
+
+app.post("/add-user", express.json(), (req, res) => {
+  const { username, password } = req.body;
+
+  const query = `
+    INSERT INTO Users 
+    (user_name, pass) 
+    VALUES (?, ?)
+  `;
+
+  connection.execute(query, [username, password], (err, results) => {
+    if (err) {
+      console.error("Error inserting data:", err.stack);
+      return res
+        .status(500)
+        .json({ error: "Database error", details: err.message });
+    }
+    res.status(200).json({ message: "Data inserted successfully", results });
+  });
+});
+
+app.post("/login", express.json(), (req, res) => {
+  const { username, password } = req.body;
+
+  const query = "SELECT * FROM Users WHERE user_name = ? AND pass = ?";
+  connection.query(query, [username, password], (err, results) => {
+    if (err) {
+      console.error("Error during login:", err.stack);
+      return res.status(500).json({ error: "Database error" });
+    }
+
+    if (results.length > 0) {
+      const uID = results[0].uID;
+      const token = jwt.sign({ uID }, process.env.SECRET_KEY, {
+        expiresIn: "1h",
+      });
+      res.status(200).json({ success: true, token });
+    } else {
+      res.status(401).json({ error: "Invalid username or password" });
+    }
+  });
+});
+
 // This helps us set the port if one happens to be in use, I do have to update teh db.js accordingly manually rn though
 portfinder.getPort({ port: 3000, stopPort: 4000 }, (err, port) => {
   if (err) {
@@ -123,3 +214,21 @@ portfinder.getPort({ port: 3000, stopPort: 4000 }, (err, port) => {
     console.log(`Server is running on http://localhost:${port}`);
   });
 });
+
+function authenticateToken(req, res, next) {
+  const token = req.headers.authorization?.split(" ")[1]; // "Bearer <token>"
+
+  if (!token) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  jwt.verify(token, process.env.SECRET_KEY, (err, user) => {
+    if (err) {
+      return res.status(403).json({ error: "Forbidden" });
+    }
+
+    // Make sure to set req.user with the decoded token payload
+    req.user = user; // user should have the uID if token is valid
+    next();
+  });
+}

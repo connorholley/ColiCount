@@ -1,170 +1,106 @@
-<html>
+<html lang="en">
   <head>
-    <link rel="stylesheet" href="index.css" />
+    <title>Authentication Page</title>
+    <link rel="stylesheet" href="website-wide-styling.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link rel="stylesheet" href="nav-bar.css" />
-    <link rel="stylesheet" href="website-wide-styling.css" />
+    <link rel="stylesheet" href="index.css" />
   </head>
   <body>
     <nav class="navbar">
       <div class="logo">
-        <a href="index.html"> coliicount</a>
-      </div>
-      <ul class="nav-links">
-        <li><a href="index.html">About</a></li>
-
-        <li><a href="analytics.html">Analytics</a></li>
-        <li><a href="data-download.html">Data Download</a></li>
-      </ul>
-      <div class="hamburger" id="hamburger">
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
+        <a href="#">coliicount</a>
       </div>
     </nav>
-
     <div class="grid-container">
       <div class="grid-item">
-        <div class="about-tabs">
-          <div class="about-tab active" data-target="analytics">Analytics</div>
-          <div class="about-tab" data-target="data-download">Data Download</div>
-          <div class="about-tab" data-target="future-plans">Future Plans</div>
-        </div>
-
         <div class="grid-content">
-          <div id="analytics" class="about-tab-content active">
+          <div class="about-tab-content active">
             <div class="container-home">
-              <h2 class="subtitle-home">Analytics</h2>
               <div class="content-home">
-                <div class="text-home">
-                  <ul>
-                    <li>
-                      <strong>Laboratory Data Processing:</strong>
-                      streamline microbial colony analysis with a comprehensive
-                      solution
-                    </li>
-                    <li>
-                      <strong>Flexible Data Entry</strong>
+                <div class="auth-container">
+                  <div id="loginForm">
+                    <h2>Login</h2>
+                    <div id="loginError" class="error-message"></div>
+                    <form onsubmit="return handleLogin(event)">
+                      <div class="form-group">
+                        <input
+                          type="text"
+                          id="loginUsername"
+                          placeholder="Username"
+                          required
+                        />
+                      </div>
+                      <div class="form-group">
+                        <input
+                          type="password"
+                          id="loginPassword"
+                          placeholder="Password"
+                          required
+                        />
+                      </div>
+                      <div class="form-group">
+                        <button type="submit">Login</button>
+                      </div>
+                    </form>
+                    <div class="switch-form">
+                      <p>
+                        Don't have an account?
+                        <a href="#" onclick="switchToCreateUser()"
+                          >Create one</a
+                        >
+                      </p>
+                    </div>
+                  </div>
 
-                      <ul>
-                        <li>Manual input method</li>
-                        <li>
-                          Automated counting via computer vision (OpenCV
-                          integration)
-                        </li>
-                      </ul>
-                    </li>
-                    <li>
-                      <strong>Advanced Visualization:</strong>
-                      interactive dashboard built with Plotly, enabling
-                      real-time analysis of colony growth patterns
-                    </li>
-                  </ul>
+                  <div id="createUserForm">
+                    <h2>Create Account</h2>
+                    <div id="createError" class="error-message"></div>
+                    <form onsubmit="return handleCreateUser(event)">
+                      <div class="form-group">
+                        <input
+                          type="text"
+                          id="newUsername"
+                          placeholder="Choose Username"
+                          required
+                        />
+                      </div>
+                      <div class="form-group">
+                        <input
+                          type="password"
+                          id="newPassword"
+                          placeholder="Create Password"
+                          required
+                        />
+                      </div>
+                      <div class="form-group">
+                        <input
+                          type="password"
+                          id="confirmPassword"
+                          placeholder="Confirm Password"
+                          required
+                        />
+                      </div>
+                      <div class="form-group">
+                        <button type="submit">Create Account</button>
+                      </div>
+                    </form>
+                    <div class="switch-form">
+                      <p>
+                        Already have an account?
+                        <a href="#" onclick="switchToLogin()">Login</a>
+                      </p>
+                    </div>
+                  </div>
                 </div>
-                <img
-                  class="image-home"
-                  src="images/ColiiCount.jpg"
-                  alt="Descriptive Alt Text"
-                />
-              </div>
-            </div>
-          </div>
-
-          <div id="data-download" class="about-tab-content">
-            <div class="container-home">
-              <h2 class="subtitle-home">Data Download</h2>
-              <div class="content-home">
-                <div class="text-home">
-                  <ul>
-                    <li>
-                      <strong>Real Time Data Querying:</strong>
-                      search functionality allows for user to search subset of
-                      data by various environmental conditions or scientific
-                      name.
-                    </li>
-                    <li>
-                      <strong>Flexible Data Download:</strong>
-                      once a subset of data is selected the user can download
-                      the data conveniently to a csv file.
-                    </li>
-                    <li>
-                      <strong>Research Insights:</strong>
-                      provides researchers with valuable, data-driven
-                      observations
-                    </li>
-                  </ul>
-                </div>
-
-                <img
-                  class="image-home"
-                  src="images/ColiiCount.jpg"
-                  alt="Descriptive Alt Text"
-                />
-              </div>
-            </div>
-          </div>
-
-          <div id="future-plans" class="about-tab-content">
-            <div class="container-home">
-              <h2 class="subtitle-home">Future Plans</h2>
-              <div class="content-home">
-                <div class="text-home">
-                  <ul>
-                    <li>
-                      <strong>Improved Computer Vision Accuracy:</strong>
-                      train the existing OpenCV functionality on a dataset to
-                      improve colony identification.
-                    </li>
-                    <li>
-                      <strong>Improved Colony Resolution:</strong>
-                    </li>
-                    <li>
-                      <strong>Confidence Measurement:</strong>
-                      provide some metric for our tools confidence in the count
-                      produced.
-                    </li>
-                    <li>
-                      <strong>User Guided Selection of Colony:</strong>
-                      allow user to select a colony on the plate and tailor
-                      area/morphology inputs from that.
-                    </li>
-                  </ul>
-                </div>
-                <img
-                  class="image-home"
-                  src="images/ColiiCount.jpg"
-                  alt="Descriptive Alt Text"
-                />
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-
-    <script>
-      // Tab switching logic
-      const tabs = document.querySelectorAll(".about-tab");
-      const tabContents = document.querySelectorAll(".about-tab-content");
-
-      tabs.forEach((tab) => {
-        tab.addEventListener("click", () => {
-          // Remove active class from all tabs and contents
-          tabs.forEach((t) => t.classList.remove("active"));
-          tabContents.forEach((content) => content.classList.remove("active"));
-
-          // Add active class to clicked tab and corresponding content
-          tab.classList.add("active");
-          const target = document.getElementById(
-            tab.getAttribute("data-target")
-          );
-          target.classList.add("active");
-        });
-      });
-    </script>
     <script src="db.js"></script>
 
-    <script src="nav-bar.js"></script>
+    <script src="index.js"></script>
   </body>
 </html>

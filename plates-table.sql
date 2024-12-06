@@ -1,12 +1,20 @@
-CREATE TABLE Coliform.Plates (
-    pID INT AUTO_INCREMENT PRIMARY KEY,       
-    eId INT,
-    sci_name VARCHAR(255) NOT NULL,           -- Genus and species of the organism
-    temp DECIMAL(5, 2),            -- Temperature in Celsius (with decimals if needed)
-    press DECIMAL(5, 2),               -- Pressure in KPa (with decimals if needed)
-    duration INT,                               -- Incubation duration in days
-    plate_type ENUM('blood', 'chocolate', 'thayer-martin') NOT NULL,  -- Agar type options
-    count INT,                              -- Coliform count (number of coliforms observed)
-    created_at DATE DEFAULT CURRENT_DATE
+-- Create the Users table first, since Plates references it
+CREATE TABLE Coliform.Users (
+    uID INT AUTO_INCREMENT PRIMARY KEY,       
+    user_name VARCHAR(10) UNIQUE NOT NULL,
+    pass VARCHAR(10) NOT NULL                  -- Removed trailing comma and made this column NOT NULL
 );
 
+-- Create the Plates table
+CREATE TABLE Coliform.Plates (
+    pID INT AUTO_INCREMENT PRIMARY KEY,  
+    uID INT,                             
+    sci_name VARCHAR(255) NOT NULL,           
+    temp DECIMAL(5, 2),                      
+    press DECIMAL(5, 2),                     
+    duration INT,                             
+    plate_type ENUM('blood', 'chocolate', 'thayer-martin') NOT NULL,  
+    count INT,                               
+    created_at DATE DEFAULT CURRENT_DATE,
+    FOREIGN KEY (uID) REFERENCES Coliform.Users(uID) ON DELETE CASCADE -- Added ON DELETE CASCADE
+);
