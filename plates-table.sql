@@ -2,7 +2,7 @@
 CREATE TABLE Coliform.Users (
     uID INT AUTO_INCREMENT PRIMARY KEY,       
     user_name VARCHAR(10) UNIQUE NOT NULL,
-    pass VARCHAR(10) NOT NULL                  -- Removed trailing comma and made this column NOT NULL
+    pass VARCHAR(10) NOT NULL                 
 );
 
 -- Create the Plates table
@@ -16,5 +16,5 @@ CREATE TABLE Coliform.Plates (
     plate_type ENUM('blood', 'chocolate', 'thayer-martin') NOT NULL,  
     count INT,                               
     created_at DATE DEFAULT CURRENT_DATE,
-    FOREIGN KEY (uID) REFERENCES Coliform.Users(uID) ON DELETE CASCADE -- Added ON DELETE CASCADE
+    FOREIGN KEY (uID) REFERENCES Coliform.Users(uID) ON DELETE CASCADE 
 );

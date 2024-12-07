@@ -32,19 +32,15 @@ connection.connect((err) => {
 app.post("/add-plate", authenticateToken, express.json(), (req, res) => {
   const { sciName, temp, press, duration, plateType, count } = req.body;
   const uId = req.user.uID;
-  console.log("the u id is ");
-  console.log(uId);
-  console.log(req);
 
-  // Replace undefined values with null
   const plateData = {
-    sciName: sciName || null,
-    temp: temp || null,
-    press: press || null,
-    duration: duration || null,
-    plateType: plateType || null,
-    uId: uId, // Assuming uId should always be present from the token
-    count: count || null,
+    sciName: sciName,
+    temp: temp,
+    press: press,
+    duration: duration,
+    plateType: plateType,
+    uId: uId,
+    count: count,
   };
 
   const query = `
@@ -149,9 +145,6 @@ app.get("/get-users", (req, res) => {
     queryParams.push(user_name);
   }
 
-  console.log("SQL Query:", query);
-  console.log("Query Parameters:", queryParams);
-
   connection.query(query, queryParams, (err, results) => {
     if (err) {
       console.error("Error fetching users:", err.stack);
@@ -227,8 +220,7 @@ function authenticateToken(req, res, next) {
       return res.status(403).json({ error: "Forbidden" });
     }
 
-    // Make sure to set req.user with the decoded token payload
-    req.user = user; // user should have the uID if token is valid
+    req.user = user;
     next();
   });
 }

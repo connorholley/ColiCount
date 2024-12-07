@@ -145,7 +145,6 @@ function logIn(username, password) {
 }
 
 function isLoggedIn() {
-  console.log(localStorage.getItem("token"));
   if (!localStorage.getItem("token")) {
     window.location.href = "/index.html";
   }
