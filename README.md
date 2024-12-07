@@ -27,7 +27,7 @@ Create a .env file in the root of your project. Use the example below as a templ
 
 `SERVER_PORT=your_server_port`
 
-'SECRET_KEY=your_secret_key'
+`SECRET_KEY=your_secret_key`
 
 ## Create Table
 Execute sql in plates-table.sql
