@@ -1,12 +1,12 @@
-let countOnes = document.getElementById("count-ones");
-let countTens = document.getElementById("count-tens");
-let countHundreds = document.getElementById("count-hundreds");
+const countOnes = document.getElementById("count-ones");
+const countTens = document.getElementById("count-tens");
+const countHundreds = document.getElementById("count-hundreds");
 
-let sciName = document.getElementById("scientific-name");
-let temp = document.getElementById("temperature");
-let pressure = document.getElementById("pressure");
-let duration = document.getElementById("duration");
-let nutrition = document.getElementById("nutrition");
+const sciName = document.getElementById("scientific-name");
+const temp = document.getElementById("temperature");
+const pressure = document.getElementById("pressure");
+const duration = document.getElementById("duration");
+const nutrition = document.getElementById("nutrition");
 
 let count = 0;
 let ones = 0;
@@ -16,22 +16,16 @@ let hundreds = 0;
 isLoggedIn();
 
 function increment() {
-  count = count + 1;
-  if (count % 100 === 0) {
-    hundreds += 1;
-    tens = 0;
-    ones = 0;
-  }
-  if (count % 10 === 0 && count % 100 != 0) {
-    tens += 1;
-    ones = 0;
-  }
-  if (count % 10 != 0 && count % 100 != 0) {
-    ones += 1;
-  }
+  count++;
+
+  ones = count % 10;
+  tens = Math.floor((count % 100) / 10);
+  hundreds = Math.floor(count / 100);
+
   countOnes.innerText = ones;
   countTens.innerText = tens;
   countHundreds.innerText = hundreds;
+
   placeColiform();
 }
 
@@ -90,5 +84,5 @@ function clearFormAndNumbers() {
   temp.value = null;
   pressure.value = null;
   duration.value = null;
-  nutrition.value = null;
+  nutrition.value = "blood";
 }

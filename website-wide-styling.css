@@ -39,7 +39,14 @@ body {
   background-color: #526E48
   
   }
-
+  .green-btn:disabled {
+    background-color: #D3D3D3;  /* Light gray background */
+    color: #888888;             /* Darker gray text */
+    cursor: not-allowed;        /* Changes cursor to indicate button is not clickable */
+    opacity: 0.65;              /* Slightly faded appearance */
+    box-shadow: none;           /* Remove any existing box shadows */
+  }
+  
   .blue-btn{
     background: #78B3CE;
     color: white;

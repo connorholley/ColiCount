@@ -1,9 +1,13 @@
-let searchUId = document.getElementById("search-uid");
-let sciName = document.getElementById("scientific-name-search");
-let temp = document.getElementById("temperature-search");
-let pressure = document.getElementById("pressure-search");
-let duration = document.getElementById("duration-search");
-let nutrition = document.getElementById("nutrition-search");
+const searchUId = document.getElementById("search-uid");
+const sciName = document.getElementById("scientific-name-search");
+const temp = document.getElementById("temperature-search");
+const pressure = document.getElementById("pressure-search");
+const duration = document.getElementById("duration-search");
+const nutrition = document.getElementById("nutrition-search");
+const downloadButton = document.getElementById("download-btn");
+const prevButton = document.getElementById("prevPage");
+const nextButton = document.getElementById("nextPage");
+
 let query_object = {};
 
 isLoggedIn();
@@ -107,8 +111,6 @@ class DataTable {
 
     // Append to target element
     targetElement.innerHTML = tableHTML;
-
-    // Add event listeners to pagination buttons
   }
   renderPaginationControls() {
     const totalPages = this.getTotalPages();
@@ -126,9 +128,7 @@ class DataTable {
   }
 
   addPaginationEventListeners() {
-    const prevButton = document.getElementById("prevPage");
-    const nextButton = document.getElementById("nextPage");
-
+    console.log("here");
     if (prevButton) {
       prevButton.addEventListener("click", () => {
         if (this.currentPage > 1) {
@@ -139,6 +139,7 @@ class DataTable {
     }
 
     if (nextButton) {
+      console.log("clicked next");
       nextButton.addEventListener("click", () => {
         if (this.currentPage < this.getTotalPages()) {
           this.currentPage++;
@@ -158,7 +159,6 @@ async function visualizePlateObjects() {
     duration: duration,
     plate_type: nutrition,
   };
-
   // Reset query_object
   query_object = {};
 
@@ -180,6 +180,7 @@ async function visualizePlateObjects() {
     const dataTable = new DataTable(dataSet, "data-table");
     // Render the table with pagination
     dataTable.renderTable();
+    downloadButton.removeAttribute("disabled");
   } else {
     // If no data found, display a "No data found" message
     targetElement.innerHTML = "<p>No data found for the given User Id.</p>";
