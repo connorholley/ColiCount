@@ -137,7 +137,27 @@
                 <canvas id="processedCanvas"></canvas>
               </div>
             </div>
-            <input type="file" id="image-input" />
+            <div class="container">
+              <!-- First Card: Upload Image, Colony Size, and Preprocessing -->
+              <div class="section">
+                <div></div>
+                <input type="file" id="imageUpload" accept="image/*" />
+
+                <div class="area-container-cv">
+                  <div class="inline">
+                    <label for="colonyAreaMin">Min Colony Area (px)</label>
+                    <input type="number" id="colonyAreaMin" />
+                  </div>
+                  <div class="inline">
+                    <label for="colonyAreaMax">Max Colony Area (px)</label>
+                    <input type="number" id="colonyAreaMax" />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Second Card: Select Plate -->
+              <div class="section"></div>
+            </div>
 
             <div style="display: block; padding: 20px">
               <h2 class="num" id="count-hundreds-auto">0</h2>

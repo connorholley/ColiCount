@@ -135,7 +135,6 @@ function logIn(username, password) {
       if (data.success && data.token) {
         // Store the token in localStorage
         localStorage.setItem("token", data.token);
-        console.log("Logged in successfully:", data);
         window.location.href = "/about.html";
       }
     })
