@@ -68,12 +68,12 @@ class DataTable {
     }
 
     // Start building the table
-    let tableHTML = '<table border="1"><tr>';
+    let tableHTML = '<table border="1" ><tr>';
 
     // Add table headers dynamically from the first data object
     if (this.data.length > 0) {
       Object.keys(this.data[0]).forEach((key) => {
-        tableHTML += `<th style="padding:10px">${key}</th>`;
+        tableHTML += `<th style="padding:10px">${cleanUpTitle(key)}</th>`;
       });
 
       tableHTML += "</tr>";
@@ -100,13 +100,15 @@ class DataTable {
     tableHTML += "</table>";
 
     // Create pagination controls
-    tableHTML += this.renderPaginationControls();
+    if (this.rowsPerPage < this.data.length) {
+      tableHTML += this.renderPaginationControls();
+      this.addPaginationEventListeners();
+    }
 
     // Append to target element
     targetElement.innerHTML = tableHTML;
 
     // Add event listeners to pagination buttons
-    this.addPaginationEventListeners();
   }
   renderPaginationControls() {
     const totalPages = this.getTotalPages();
@@ -213,4 +215,11 @@ async function downloadExcelFile() {
     console.error("Error generating Excel file:", err);
     alert("Failed to generate Excel file. Please try again.");
   }
+}
+function cleanUpTitle(sentence) {
+  return sentence
+    .replaceAll("_", " ")
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
 }

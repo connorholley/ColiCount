@@ -8,7 +8,6 @@ let originalCanvas = document.getElementById("originalCanvas");
 let processedCanvas = document.getElementById("processedCanvas");
 let originalCtx = originalCanvas.getContext("2d");
 let processedCtx = processedCanvas.getContext("2d");
-let debugImagesContainer = document.getElementById("debugImages");
 let isSelectingPlate = false;
 let isDragging = false;
 let plateCircle = { x: 0, y: 0, radius: 20 }; // Default circle properties
@@ -102,46 +101,13 @@ function preprocessImage(src, method) {
   return { processed: opened, debugImages };
 }
 
-// Display debug images
-function displayDebugImages(debugImages) {
-  // Clear previous debug images
-  debugImagesContainer.innerHTML = "";
-
-  // Create debug image canvases
-  debugImages.forEach(({ mat, name }) => {
-    let debugCanvas = document.createElement("canvas");
-    debugCanvas.classList.add("debug-image");
-    let debugCtx = debugCanvas.getContext("2d");
-
-    debugCanvas.width = mat.cols;
-    debugCanvas.height = mat.rows;
-
-    // Show the image before deleting the mat
-    cv.imshow(debugCanvas, mat);
-
-    // Create label
-    let label = document.createElement("div");
-    label.textContent = name;
-
-    // Append to debug container
-    let wrapper = document.createElement("div");
-    wrapper.appendChild(label);
-    wrapper.appendChild(debugCanvas);
-    debugImagesContainer.appendChild(wrapper);
-
-    // Delete the mat after displaying
-    mat.delete();
-  });
-}
-
 document.getElementById("imageUpload").addEventListener("change", function (e) {
-  // debugImagesContainer.innerHTML = "";
   originalCanvas.value = "";
   processedCanvas.value = "";
   isSelectingPlate = false;
   isDragging = false;
-  isPlateSelected = false; // Reset plate selection
-  plateCircle = { x: 0, y: 0, radius: 20 }; // Default circle properties
+  isPlateSelected = false;
+  plateCircle = { x: 0, y: 0, radius: 20 };
   const file = e.target.files[0];
   const reader = new FileReader();
 

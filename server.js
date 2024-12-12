@@ -122,6 +122,7 @@ app.get("/get-plates", authenticateToken, (req, res) => {
   if (conditions.length > 0) {
     query += " WHERE " + conditions.join(" AND ");
   }
+  query += " ORDER BY created_at DESC";
   // Execute the query
   connection.query(query, queryParams, (err, results) => {
     if (err) {
