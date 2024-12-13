@@ -33,11 +33,11 @@
         <div class="search-container">
           <div class="search-container-div">
             <input
+              type="text"
               class="search-input"
-              type="number"
-              placeholder="Search UID number..."
-              name="search"
-              id="search-uid"
+              id="scientific-name-search"
+              name="scientific-name"
+              placeholder="Scientific Name"
             />
             <input
               type="number"
@@ -46,16 +46,9 @@
               name="temperature"
               placeholder="Temperature (°C)"
             />
-            <input
-              type="text"
-              class="search-input"
-              id="scientific-name-search"
-              name="scientific-name"
-              placeholder="Genus and Species"
-            />
 
             <select class="search-input" id="nutrition-search" name="nutrition">
-              <option value="">Choose Agar...</option>
+              <option value="">Agar Nutrition</option>
               <option value="blood">Blood Agar</option>
               <option value="chocolate">Chocolate Agar</option>
               <option value="thayer-martin">Thayer-Martin Agar</option>

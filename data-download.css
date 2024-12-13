@@ -37,7 +37,7 @@
 /* Form container */
 .search-container-div {
   display: grid;
-  grid-template-columns: repeat(6, 1fr) auto; /* 5 columns for inputs, 1 for the button */
+  grid-template-columns: repeat(5, 1fr) auto; /* 5 columns for inputs, 1 for the button */
   gap: 10px; /* Space between fields */
   border: 1px solid #dee2e6;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);

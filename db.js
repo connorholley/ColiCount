@@ -58,8 +58,15 @@ async function getData(
     );
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      const unauthorized = response.status === 401 || response.status === 403;
+      if (unauthorized) {
+        localStorage.removeItem("token");
+        window.location.href = "/index.html";
+      }
+      return [];
     }
+
+    console.log("response");
 
     const data = await response.json();
     console.log("Fetched data successfully:", data);
@@ -144,6 +151,7 @@ function logIn(username, password) {
 }
 
 function isLoggedIn() {
+  console.log(localStorage.getItem("token"));
   if (!localStorage.getItem("token")) {
     window.location.href = "/index.html";
   }

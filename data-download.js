@@ -1,4 +1,3 @@
-const searchUId = document.getElementById("search-uid");
 const sciName = document.getElementById("scientific-name-search");
 const temp = document.getElementById("temperature-search");
 const pressure = document.getElementById("pressure-search");
@@ -152,7 +151,6 @@ class DataTable {
 
 async function visualizePlateObjects() {
   let query_fields = {
-    uId: searchUId,
     sci_name: sciName,
     temp: temp,
     press: pressure,
@@ -199,8 +197,7 @@ async function downloadExcelFile() {
   var yyyy = today.getFullYear();
 
   today = mm + "/" + dd + "/" + yyyy;
-  let filename =
-    "coliform_analytics_" + searchUId.value + "_" + today + ".xlsx";
+  let filename = "coliform_analytics_" + today + ".xlsx";
 
   try {
     // Convert full data to a worksheet
