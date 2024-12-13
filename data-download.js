@@ -4,8 +4,6 @@ const pressure = document.getElementById("pressure-search");
 const duration = document.getElementById("duration-search");
 const nutrition = document.getElementById("nutrition-search");
 const downloadButton = document.getElementById("download-btn");
-const prevButton = document.getElementById("prevPage");
-const nextButton = document.getElementById("nextPage");
 
 let query_object = {};
 
@@ -113,6 +111,7 @@ class DataTable {
   }
   renderPaginationControls() {
     const totalPages = this.getTotalPages();
+    console.log(totalPages);
     return `
       <div id="pagination" style="margin-top: 10px;">
         <button class="blue-btn" id="prevPage" ${
@@ -125,27 +124,37 @@ class DataTable {
       </div>
     `;
   }
-
   addPaginationEventListeners() {
-    console.log("here");
-    if (prevButton) {
-      prevButton.addEventListener("click", () => {
-        if (this.currentPage > 1) {
-          this.currentPage--;
-          this.renderTable();
-        }
-      });
-    }
+    // Use setTimeout to ensure DOM is fully updated
+    setTimeout(() => {
+      const prevButton = document.getElementById("prevPage");
+      const nextButton = document.getElementById("nextPage");
 
-    if (nextButton) {
-      console.log("clicked next");
-      nextButton.addEventListener("click", () => {
-        if (this.currentPage < this.getTotalPages()) {
-          this.currentPage++;
-          this.renderTable();
-        }
-      });
-    }
+      // Bind the context explicitly
+      if (prevButton) {
+        prevButton.addEventListener(
+          "click",
+          (() => {
+            if (this.currentPage > 1) {
+              this.currentPage--;
+              this.renderTable();
+            }
+          }).bind(this)
+        );
+      }
+
+      if (nextButton) {
+        nextButton.addEventListener(
+          "click",
+          (() => {
+            if (this.currentPage < this.getTotalPages()) {
+              this.currentPage++;
+              this.renderTable();
+            }
+          }).bind(this)
+        );
+      }
+    }, 0);
   }
 }
 
