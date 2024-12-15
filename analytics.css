@@ -52,7 +52,7 @@ h2 {
   margin-bottom: 20px;
 }
 
-#plate-object-form {
+#plate-object-form{
   width: 100%;
   height: 90%;
   text-align: left;
@@ -71,6 +71,7 @@ h2 {
 #plate-object-form label {
   font-size: 1rem;
   margin-bottom: 5px;
+  text-align: left;
 }
 
 #plate-object-form input,
@@ -81,10 +82,49 @@ h2 {
   box-sizing: border-box;
 }
 
+
 #plate-object-form small {
   color: #666;
   font-size: 0.9rem;
 }
+
+
+
+#auto-plate {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px;
+  align-items: center;
+  max-width: 500px;
+  margin: 0 auto; /* Center the form within its container */
+  margin-top: 5%;
+}
+
+#auto-plate .field {
+  display: contents;
+}
+
+#auto-plate label {
+  text-align: left;
+  padding-right: 15px;
+  font-size: 1rem;
+}
+
+#auto-plate input,
+#auto-plate select {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+#auto-plate small {
+  grid-column: 2;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+
 
 .num {
   display: inline-block;
@@ -156,8 +196,9 @@ svg {
   margin-top: 20px;
 }
 
-.image-container-cv {
-  display: flex;
+#image-container-cv {
+  display: none;
+
   gap: 20px;
   justify-content: center;
   align-items: flex-start;

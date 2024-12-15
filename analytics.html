@@ -127,7 +127,43 @@
           </div>
 
           <div id="automated-tab" class="tab-content">
-            <div class="image-container-cv">
+            <div class="container">
+              <!-- First Card: Upload Image, Colony Size, and Preprocessing -->
+              <div class="section">
+                <div></div>
+                <form id="auto-plate">
+                  <div class="field">
+                    <label for="file">Upload Image:</label>
+                    <input
+                      type="file"
+                      id="imageUpload"
+                      accept="image/*"
+                      required
+                    />
+
+                    <small></small>
+                  </div>
+
+                  <div class="field">
+                    <label for="colonyAreaMin">Min Colony Area (px):</label>
+                    <input type="number" id="colonyAreaMin" required />
+
+                    <small></small>
+                  </div>
+
+                  <div class="field">
+                    <label for="colonyAreaMax">Max Colony Area (px):</label>
+                    <input type="number" id="colonyAreaMax" required />
+
+                    <small></small>
+                  </div>
+                </form>
+              </div>
+
+              <!-- Second Card: Select Plate -->
+              <div class="section"></div>
+            </div>
+            <div id="image-container-cv">
               <div class="image-box">
                 <h3>Original</h3>
                 <canvas id="originalCanvas"></canvas>
@@ -137,28 +173,6 @@
                 <canvas id="processedCanvas"></canvas>
               </div>
             </div>
-            <div class="container">
-              <!-- First Card: Upload Image, Colony Size, and Preprocessing -->
-              <div class="section">
-                <div></div>
-                <input type="file" id="imageUpload" accept="image/*" />
-
-                <div class="area-container-cv">
-                  <div class="inline">
-                    <label for="colonyAreaMin">Min Colony Area (px)</label>
-                    <input type="number" id="colonyAreaMin" />
-                  </div>
-                  <div class="inline">
-                    <label for="colonyAreaMax">Max Colony Area (px)</label>
-                    <input type="number" id="colonyAreaMax" />
-                  </div>
-                </div>
-              </div>
-
-              <!-- Second Card: Select Plate -->
-              <div class="section"></div>
-            </div>
-
             <div style="display: block; padding: 20px">
               <h2 class="num" id="count-hundreds-auto">0</h2>
               <h2 class="num" id="count-tens-auto">0</h2>

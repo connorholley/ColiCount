@@ -3,7 +3,6 @@ let countOnesAuto = document.getElementById("count-ones-auto");
 let countTensAuto = document.getElementById("count-tens-auto");
 let countHundredsAuto = document.getElementById("count-hundreds-auto");
 
-let imageInput = document.getElementById("image-input");
 let originalCanvas = document.getElementById("originalCanvas");
 let processedCanvas = document.getElementById("processedCanvas");
 let originalCtx = originalCanvas.getContext("2d");
@@ -17,22 +16,10 @@ const colonyCountElement = document.getElementById("colonyCount");
 const imageUpload = document.getElementById("imageUpload");
 const processButton = document.getElementById("processButton");
 let isPlateSelected = false;
-
+let imageProcessed = false;
 const inputImage = new Image();
-
-function validateSteps() {
-  const isImageUploaded = imageUpload.files.length > 0;
-  const isMinAreaSet = colonyAreaMin.value.trim() !== "";
-  const isMaxAreaSet = colonyAreaMax.value.trim() !== "";
-
-  // Enable process button only if all conditions are met
-  processButton.disabled = !(
-    isImageUploaded &&
-    isPlateSelected &&
-    isMinAreaSet &&
-    isMaxAreaSet
-  );
-}
+const imageContainer = document.getElementById("image-container-cv");
+const auto = document.getElementById("auto-plate");
 
 // Preprocessing methods
 function preprocessImage(src, method) {
@@ -122,9 +109,8 @@ document.getElementById("imageUpload").addEventListener("change", function (e) {
       processedCanvas.height = inputImage.height;
 
       originalCtx.drawImage(inputImage, 0, 0);
-
+      imageContainer.style.display = "flex";
       // Validate steps
-      validateSteps();
 
       isSelectingPlate = true;
       alert(
@@ -132,8 +118,7 @@ document.getElementById("imageUpload").addEventListener("change", function (e) {
       );
     };
   };
-  colonyAreaMin.addEventListener("input", validateSteps);
-  colonyAreaMax.addEventListener("input", validateSteps);
+
   originalCanvas.addEventListener("mousedown", (e) => {
     if (!isSelectingPlate) return;
 
@@ -168,10 +153,6 @@ document.getElementById("imageUpload").addEventListener("change", function (e) {
     originalCtx.strokeStyle = "red";
     originalCtx.lineWidth = 2;
     originalCtx.stroke();
-
-    document.getElementById("selectedRadius").textContent = Math.round(
-      plateCircle.radius
-    );
   });
 
   originalCanvas.addEventListener("mouseup", () => {
@@ -183,7 +164,6 @@ document.getElementById("imageUpload").addEventListener("change", function (e) {
     alert("Plate selection finalized.");
 
     // Validate steps
-    validateSteps();
   });
   reader.readAsDataURL(file);
 });
@@ -196,6 +176,14 @@ document.getElementById("processButton").addEventListener("click", function () {
     return;
   }
 
+  if (!auto.checkValidity()) {
+    auto.reportValidity();
+    return;
+  }
+  if (!isPlateSelected) {
+    alert("Select plate region on image");
+    return;
+  }
   // Create Mat from image
   let src = cv.imread(inputImage);
 
@@ -348,6 +336,7 @@ function displayColonyCount(colonyCount) {
   countOnesAuto.innerText = colonyCount % 10; // Ones place
   countTensAuto.innerText = Math.floor((colonyCount % 100) / 10); // Tens place
   countHundredsAuto.innerText = Math.floor(colonyCount / 100); // Hundreds place
+  imageProcessed = true;
 }
 
 function createPlateObjectAuto() {
@@ -359,6 +348,10 @@ function createPlateObjectAuto() {
     return false;
   }
 
+  if (!imageProcessed) {
+    alert("Ensure image has been processed to get proper count");
+    return false;
+  }
   try {
     // Attempt to write data
     writeData(
@@ -400,7 +393,11 @@ function clearFormAndNumbersAuto() {
   duration.value = null;
   nutrition.value = null;
   colonyCount = 0;
-
+  imageProcessed = false;
+  colonyAreaMax.value = null;
+  colonyAreaMin.value = null;
+  imageUpload.value = "";
+  imageContainer.style.display = "none";
   originalCtx.clearRect(0, 0, originalCanvas.width, originalCanvas.height);
   processedCtx.clearRect(0, 0, processedCanvas.width, processedCanvas.height);
 }
