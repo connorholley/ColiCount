@@ -5,13 +5,13 @@
   width: 98%;
   margin: auto;
   grid-auto-rows: 1fr;
+  
 }
 
 .grid-item {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 100%;
 }
 
 .title {

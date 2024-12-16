@@ -29,6 +29,7 @@
                           id="loginUsername"
                           placeholder="Username"
                           required
+                          maxlength="10"
                         />
                       </div>
                       <div class="form-group">
@@ -37,6 +38,7 @@
                           id="loginPassword"
                           placeholder="Password"
                           required
+                          maxlength="10"
                         />
                       </div>
                       <div class="form-group">
@@ -56,14 +58,19 @@
                   <div id="createUserForm">
                     <h2>Create Account</h2>
                     <div id="createError" class="error-message"></div>
-                    <form onsubmit="return handleCreateUser(event)">
+                    <form
+                      id="create-user"
+                      onsubmit="return handleCreateUser(event)"
+                    >
                       <div class="form-group">
                         <input
                           type="text"
                           id="newUsername"
                           placeholder="Choose Username"
                           required
+                          maxlength="10"
                         />
+                        <small></small>
                       </div>
                       <div class="form-group">
                         <input
@@ -71,7 +78,9 @@
                           id="newPassword"
                           placeholder="Create Password"
                           required
+                          maxlength="10"
                         />
+                        <small></small>
                       </div>
                       <div class="form-group">
                         <input
@@ -79,7 +88,9 @@
                           id="confirmPassword"
                           placeholder="Confirm Password"
                           required
+                          maxlength="10"
                         />
+                        <small></small>
                       </div>
                       <div class="form-group">
                         <button type="submit">Create Account</button>

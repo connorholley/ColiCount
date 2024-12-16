@@ -11,7 +11,6 @@ async function verifyUser(username, password) {
 
     // Assuming the first result is the user (if usernames are unique)
     const user = users[0];
-    console.log(user);
     // Compare the provided password with the stored password
     // Note: In a real-world scenario, you'd use password hashing!
     if (user.pass === password) {
@@ -34,8 +33,6 @@ async function handleLogin(event) {
   const password = document.getElementById("loginPassword").value;
   const loginError = document.getElementById("loginError");
 
-  console.log(username);
-  console.log(password);
   const result = await verifyUser(username, password);
 
   if (result) {
@@ -53,8 +50,7 @@ async function handleCreateUser(event) {
   const new_password = document.getElementById("newPassword").value;
   const confirmPassword = document.getElementById("confirmPassword").value;
   const createError = document.getElementById("createError");
-
-  console.log(new_username);
+  const form = document.getElementById("create-user");
 
   if (new_password !== confirmPassword) {
     createError.textContent = "Passwords do not match";
@@ -70,6 +66,11 @@ async function handleCreateUser(event) {
     return;
   } else {
     createError.textContent = "";
+
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return false;
+    }
     await createUser(new_username, new_password);
     alert("Account Created Successfully!");
     switchToLogin();
