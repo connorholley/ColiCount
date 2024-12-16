@@ -43,6 +43,32 @@ async function handleLogin(event) {
     loginError.textContent = "Invalid username or password";
   }
 }
+function checkPasswordStrength(password) {
+  // Create an object to track password requirements
+  const requirements = {
+    hasUpperCase: /[A-Z]/.test(password),
+    hasNumber: /[0-9]/.test(password),
+    hasSpecialChar: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password),
+  };
+
+  // Collect missing requirements
+  const missingRequirements = [];
+
+  if (!requirements.hasUpperCase) {
+    missingRequirements.push("an uppercase letter");
+  }
+
+  if (!requirements.hasNumber) {
+    missingRequirements.push("a number");
+  }
+
+  if (!requirements.hasSpecialChar) {
+    missingRequirements.push("a special character");
+  }
+
+  // Return either false (if all requirements met) or the list of missing requirements
+  return missingRequirements.length === 0 ? true : missingRequirements;
+}
 
 async function handleCreateUser(event) {
   event.preventDefault();
@@ -52,8 +78,19 @@ async function handleCreateUser(event) {
   const createError = document.getElementById("createError");
   const form = document.getElementById("create-user");
 
+  // Check if passwords match
   if (new_password !== confirmPassword) {
     createError.textContent = "Passwords do not match";
+    return;
+  }
+
+  // Check password strength
+  const passwordCheck = checkPasswordStrength(new_password);
+  if (passwordCheck !== true) {
+    // If passwordCheck is an array of missing requirements
+    createError.textContent = `Password must contain ${passwordCheck.join(
+      ", "
+    )}`;
     return;
   }
 
