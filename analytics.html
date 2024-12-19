@@ -195,14 +195,19 @@
         <div class="grid-content">
           <div id="myPlot"></div>
           <div class="plot-button-container">
-            <label for="x-axis">Choose X-Axis</label>
+            <label for="x-axis">Choose X-Axis:</label>
             <select id="x-axis" name="x-axis">
               <option selected value="press">Pressure</option>
               <option value="temp">Temperature</option>
               <option value="duration">Duration</option>
             </select>
-            <button class="blue-btn" onclick="plotData()">PLOT</button>
+            <label for="type-select">Choose Graph Type:</label>
+            <select id="type-select" name="type-select">
+              <option selected value="bar">Bar</option>
+              <option value="scatter">Scatter</option>
+            </select>
           </div>
+          <button class="blue-btn" onclick="plotData()">PLOT</button>
         </div>
       </div>
     </div>

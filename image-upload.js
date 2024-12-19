@@ -432,12 +432,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
 
-    // Position the cursor
     cursor.style.left = `${e.clientX}px`;
     cursor.style.top = `${e.clientY}px`;
 
-    // Optional: You can add logic to change cursor appearance based on canvas position
-    // For example, change color or size
     if (x > 0 && x < rect.width && y > 0 && y < rect.height) {
       cursor.style.borderColor = "blue"; // Change border color when inside canvas
       cursor.style.display = "block";
@@ -447,12 +444,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Hide cursor when mouse leaves canvas or no image is present
   canvas.addEventListener("mouseleave", () => {
     cursor.style.display = "none";
   });
 
-  // Show cursor when mouse enters canvas and image is present
   canvas.addEventListener("mouseenter", () => {
     if (canvasHasContent()) {
       cursor.style.display = "block";

@@ -176,7 +176,7 @@ svg {
 .plot-button-container {
   display: flex;
   justify-content: center;
-  gap: 10px;
+  gap: 30px;
   margin: 20px 0;
   align-items: center; /* Align items vertically */
 

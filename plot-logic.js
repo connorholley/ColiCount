@@ -1,9 +1,11 @@
 let selection = document.getElementById("x-axis");
+let typeSelect = document.getElementById("type-select");
 
 async function plotData() {
   // Check if a valid option was selected
 
   let i_var = selection.value;
+  let graph_type = typeSelect.value;
 
   // Fetch all datasets concurrently
   const [bloodArray, chocolateArray, thayerArray] = await Promise.all([
@@ -30,27 +32,32 @@ async function plotData() {
     parseFloat(item["count"] || 0)
   );
 
-  // Define the bar chart data
+  // Define the chart data
   const data = [
     {
       x: xBloodValues,
       y: yBloodValues,
       name: "Blood",
-      type: "bar",
+      type: graph_type,
+      mode: "markers",
       marker: { color: "red" },
     },
     {
       x: xChocolateValues,
       y: yChocolateValues,
       name: "Chocolate",
-      type: "bar",
+      type: graph_type,
+      mode: "markers",
+
       marker: { color: "brown" },
     },
     {
       x: xThayerValues,
       y: yThayerValues,
       name: "Thayer-Martin",
-      type: "bar",
+      type: graph_type,
+      mode: "markers",
+
       marker: { color: "blue" },
     },
   ];
