@@ -38,7 +38,6 @@ async function handleLogin(event) {
   if (result) {
     loginError.textContent = "";
     logIn(username, password);
-    alert("Login Successful!");
   } else {
     loginError.textContent = "Invalid username or password";
   }

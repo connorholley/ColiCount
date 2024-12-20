@@ -245,7 +245,7 @@ document.getElementById("processButton").addEventListener("click", function () {
     }
   }
 
-  console.log(`Largest Contour Area (Plate): ${maxArea}`);
+  // console.log(`Largest Contour Area (Plate): ${maxArea}`);
 
   // Function to check if a contour touches the plate
   function touchesContour(contour, plateContour, threshold = 0) {
@@ -278,17 +278,17 @@ document.getElementById("processButton").addEventListener("click", function () {
   for (let i = 0; i < contours.size(); i++) {
     let contour = contours.get(i);
     let area = cv.contourArea(contour);
-    console.log(`Contour ${i} area: ${area}`);
+    // console.log(`Contour ${i} area: ${area}`);
 
     // Skip the plate contour and contours that touch the plate
     if (contour === maxContour || touchesContour(contour, maxContour)) {
-      console.log(`Contour ${i} skipped: Touches the plate or is the plate.`);
+      // console.log(`Contour ${i} skipped: Touches the plate or is the plate.`);
       continue;
     }
 
     // Skip if it's too small or large
     if (area <= colonyAreaMin.value || area >= colonyAreaMax.value) {
-      console.log(`Contour ${i} skipped: Out of area range.`);
+      // console.log(`Contour ${i} skipped: Out of area range.`);
       continue;
     }
 
@@ -317,7 +317,6 @@ document.getElementById("processButton").addEventListener("click", function () {
   // Update colony count
   // colonyCountElement.textContent = `Colony Count: ${colonyCount}`;
   displayColonyCount(colonyCount);
-  console.log(`Final Colony Count: ${colonyCount}`);
 
   // Display processed image
   cv.imshow("processedCanvas", resizedSrc);
