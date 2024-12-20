@@ -63,6 +63,7 @@ function createPlateObject() {
     clearAgar();
     initializeAgar();
     clearFormAndNumbers();
+    plotData();
   } catch (error) {
     // If an error occurs during writeData or subsequent processes
     console.error("Error creating plate object:", error);
