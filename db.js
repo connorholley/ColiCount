@@ -142,7 +142,7 @@ function logIn(username, password) {
       if (data.success && data.token) {
         // Store the token in localStorage
         localStorage.setItem("token", data.token);
-        window.location.href = "/about.html";
+        window.location.href = "/analytics.html";
       }
     })
     .catch((error) => {
