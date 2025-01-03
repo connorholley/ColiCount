@@ -353,6 +353,7 @@ function createPlateObjectAuto() {
     // Clear form and reset elements
 
     clearFormAndNumbersAuto();
+    plotData();
   } catch (error) {
     // If an error occurs during writeData or subsequent processes
     console.error("Error creating plate object:", error);
@@ -369,11 +370,11 @@ function clearFormAndNumbersAuto() {
   temp.value = null;
   pressure.value = null;
   duration.value = null;
-  nutrition.value = null;
+  nutrition.value = "blood";
   colonyCount = 0;
   imageProcessed = false;
-  colonyAreaMax.value = null;
-  colonyAreaMin.value = null;
+  colonyAreaMax.value = "100";
+  colonyAreaMin.value = "0";
   imageUpload.value = "";
   imageContainer.style.display = "none";
   originalCtx.clearRect(0, 0, originalCanvas.width, originalCanvas.height);
