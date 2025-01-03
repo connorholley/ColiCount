@@ -1,3 +1,8 @@
+const sciName = document.getElementById("scientific-name");
+const temp = document.getElementById("temperature");
+const pressure = document.getElementById("pressure");
+const duration = document.getElementById("duration");
+const nutrition = document.getElementById("nutrition");
 let colonyCount = 0;
 let countOnesAuto = document.getElementById("count-ones-auto");
 let countTensAuto = document.getElementById("count-tens-auto");
@@ -6,7 +11,7 @@ let countHundredsAuto = document.getElementById("count-hundreds-auto");
 let originalCanvas = document.getElementById("originalCanvas");
 let processedCanvas = document.getElementById("processedCanvas");
 let originalCtx = originalCanvas.getContext("2d");
-let processedCtx = processedCanvas.getContext("2d");
+// let processedCtx = processedCanvas.getContext("2d");
 let isSelectingPlate = false;
 let isDragging = false;
 let plateCircle = { x: 0, y: 0, radius: 20 }; // Default circle properties
@@ -14,12 +19,13 @@ let colonyAreaMin = document.getElementById("colonyAreaMin");
 let colonyAreaMax = document.getElementById("colonyAreaMax");
 const colonyCountElement = document.getElementById("colonyCount");
 const imageUpload = document.getElementById("imageUpload");
-const processButton = document.getElementById("processButton");
 let isPlateSelected = false;
 let imageProcessed = false;
 const inputImage = new Image();
 const imageContainer = document.getElementById("image-container-cv");
 const auto = document.getElementById("auto-plate");
+const currentValueMin = document.getElementById("currentValueMin");
+const currentValueMax = document.getElementById("currentValueMax");
 
 // Preprocessing methods
 function preprocessImage(src, method) {
@@ -88,9 +94,146 @@ function preprocessImage(src, method) {
   return { processed: opened, debugImages };
 }
 
+// Function to process image and count colonies
+function processImageAndCountColonies() {
+  if (!plateCircle.radius) {
+    alert("Please select the plate boundaries first.");
+    return;
+  }
+
+  if (!auto.checkValidity()) {
+    auto.reportValidity();
+    return;
+  }
+
+  if (!isPlateSelected) {
+    alert("Select plate region on image");
+    return;
+  }
+
+  // Create Mat from image and resize
+  let src = cv.imread(inputImage);
+  let resizedSrc = new cv.Mat();
+  let scaleFactor = 1;
+  cv.resize(
+    src,
+    resizedSrc,
+    new cv.Size(src.cols * scaleFactor, src.rows * scaleFactor)
+  );
+
+  // Create and apply mask
+  let mask = new cv.Mat.zeros(resizedSrc.rows, resizedSrc.cols, cv.CV_8U);
+  cv.circle(
+    mask,
+    new cv.Point(plateCircle.x * scaleFactor, plateCircle.y * scaleFactor),
+    plateCircle.radius * scaleFactor,
+    new cv.Scalar(255),
+    -1
+  );
+
+  let maskedSrc = new cv.Mat();
+  cv.bitwise_and(resizedSrc, resizedSrc, maskedSrc, mask);
+
+  // Process image and find contours
+  let { processed } = preprocessImage(maskedSrc, "adaptive");
+  cv.imshow("originalCanvas", processed);
+
+  let contours = new cv.MatVector();
+  let hierarchy = new cv.Mat();
+  cv.findContours(
+    processed,
+    contours,
+    hierarchy,
+    cv.RETR_TREE,
+    cv.CHAIN_APPROX_SIMPLE
+  );
+
+  // Find largest contour (plate)
+  let maxArea = 0;
+  let maxContour = null;
+  for (let i = 0; i < contours.size(); i++) {
+    let contour = contours.get(i);
+    let area = cv.contourArea(contour);
+    if (area > maxArea) {
+      maxArea = area;
+      maxContour = contour;
+    }
+  }
+
+  // Count colonies
+  colonyCount = 0;
+  for (let i = 0; i < contours.size(); i++) {
+    let contour = contours.get(i);
+    let area = cv.contourArea(contour);
+
+    if (contour === maxContour || touchesContour(contour, maxContour)) {
+      continue;
+    }
+
+    if (area <= colonyAreaMin.value || area >= colonyAreaMax.value) {
+      continue;
+    }
+
+    // Draw colony contour
+    cv.drawContours(
+      resizedSrc,
+      contours,
+      i,
+      new cv.Scalar(0, 255, 0),
+      2,
+      cv.LINE_8,
+      hierarchy,
+      100
+    );
+    colonyCount++;
+  }
+
+  displayColonyCount(colonyCount);
+  cv.imshow("originalCanvas", resizedSrc);
+
+  // Clean up
+  [src, resizedSrc, maskedSrc, mask, processed, contours, hierarchy].forEach(
+    (mat) => mat.delete()
+  );
+}
+
+// Helper function to check if contour touches plate
+function touchesContour(contour, plateContour, threshold = 0) {
+  for (let i = 0; i < contour.rows; i++) {
+    let point = contour.data32S.slice(i * 2, i * 2 + 2);
+    let x = point[0];
+    let y = point[1];
+
+    for (let j = 0; j < plateContour.rows; j++) {
+      let platePoint = plateContour.data32S.slice(j * 2, j * 2 + 2);
+      let plateX = platePoint[0];
+      let plateY = platePoint[1];
+
+      let distance = Math.sqrt(
+        Math.pow(x - plateX, 2) + Math.pow(y - plateY, 2)
+      );
+      if (distance < threshold) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+// Event listeners for sliders
+colonyAreaMin.addEventListener("input", function () {
+  currentValueMin.textContent = this.value + " px";
+  processImageAndCountColonies();
+});
+
+colonyAreaMax.addEventListener("input", function () {
+  currentValueMax.textContent = this.value + " px";
+  processImageAndCountColonies();
+});
+
 document.getElementById("imageUpload").addEventListener("change", function (e) {
   originalCanvas.value = "";
-  processedCanvas.value = "";
+  // processedCanvas.value = "";
   isSelectingPlate = false;
   isDragging = false;
   isPlateSelected = false;
@@ -105,8 +248,8 @@ document.getElementById("imageUpload").addEventListener("change", function (e) {
       // Set canvas sizes and draw the original image
       originalCanvas.width = inputImage.width;
       originalCanvas.height = inputImage.height;
-      processedCanvas.width = inputImage.width;
-      processedCanvas.height = inputImage.height;
+      // processedCanvas.width = inputImage.width;
+      // processedCanvas.height = inputImage.height;
 
       originalCtx.drawImage(inputImage, 0, 0);
       imageContainer.style.display = "flex";
@@ -161,174 +304,10 @@ document.getElementById("imageUpload").addEventListener("change", function (e) {
     isDragging = false;
     isSelectingPlate = false;
     isPlateSelected = true; // Mark plate as selected
-    alert("Plate selection finalized.");
-
+    processImageAndCountColonies();
     // Validate steps
   });
   reader.readAsDataURL(file);
-});
-
-// Add event listeners to colony area inputs
-
-document.getElementById("processButton").addEventListener("click", function () {
-  if (!plateCircle.radius) {
-    alert("Please select the plate boundaries first.");
-    return;
-  }
-
-  if (!auto.checkValidity()) {
-    auto.reportValidity();
-    return;
-  }
-  if (!isPlateSelected) {
-    alert("Select plate region on image");
-    return;
-  }
-  // Create Mat from image
-  let src = cv.imread(inputImage);
-
-  // Resize image for better processing (adjust based on your image size)
-  let resizedSrc = new cv.Mat();
-  let scaleFactor = 1; // Adjust scale factor if necessary
-  cv.resize(
-    src,
-    resizedSrc,
-    new cv.Size(src.cols * scaleFactor, src.rows * scaleFactor)
-  );
-
-  // Create a mask with the plateCircle
-  let mask = new cv.Mat.zeros(resizedSrc.rows, resizedSrc.cols, cv.CV_8U);
-  cv.circle(
-    mask,
-    new cv.Point(plateCircle.x * scaleFactor, plateCircle.y * scaleFactor),
-    plateCircle.radius * scaleFactor,
-    new cv.Scalar(255),
-    -1
-  );
-
-  // Apply the mask to the resized image
-  let maskedSrc = new cv.Mat();
-  cv.bitwise_and(resizedSrc, resizedSrc, maskedSrc, mask);
-
-  // Preprocess the masked image
-  let { processed, debugImages } = preprocessImage(maskedSrc, "adaptive");
-
-  // Display debug images
-  //   displayDebugImages(debugImages);
-
-  // Visualize the processed image for debugging
-  cv.imshow("processedCanvas", processed);
-
-  // Detect contours in the processed image
-  let contours = new cv.MatVector();
-  let hierarchy = new cv.Mat();
-  cv.findContours(
-    processed,
-    contours,
-    hierarchy,
-    cv.RETR_TREE,
-    cv.CHAIN_APPROX_SIMPLE
-  );
-
-  // Initialize variable to store the largest contour area (plate)
-  let maxArea = 0;
-  let maxContour = null; // To store the largest contour (plate)
-
-  // Iterate through the contours to find the one with the maximum area
-  for (let i = 0; i < contours.size(); i++) {
-    let contour = contours.get(i);
-    let area = cv.contourArea(contour);
-
-    if (area > maxArea) {
-      maxArea = area;
-      maxContour = contour; // Update the largest contour (plate)
-    }
-  }
-
-  // console.log(`Largest Contour Area (Plate): ${maxArea}`);
-
-  // Function to check if a contour touches the plate
-  function touchesContour(contour, plateContour, threshold = 0) {
-    for (let i = 0; i < contour.rows; i++) {
-      let point = contour.data32S.slice(i * 2, i * 2 + 2);
-      let x = point[0];
-      let y = point[1];
-
-      // Check if the contour point is near the plate's contour
-      for (let j = 0; j < plateContour.rows; j++) {
-        let platePoint = plateContour.data32S.slice(j * 2, j * 2 + 2);
-        let plateX = platePoint[0];
-        let plateY = platePoint[1];
-
-        // Calculate the distance between the point and the plate's contour point
-        let distance = Math.sqrt(
-          Math.pow(x - plateX, 2) + Math.pow(y - plateY, 2)
-        );
-
-        // If the distance is less than the threshold, the contour touches the plate
-        if (distance < threshold) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
-  // Iterate through the contours to process the ones that are not touching the plate
-  for (let i = 0; i < contours.size(); i++) {
-    let contour = contours.get(i);
-    let area = cv.contourArea(contour);
-    // console.log(`Contour ${i} area: ${area}`);
-
-    // Skip the plate contour and contours that touch the plate
-    if (contour === maxContour || touchesContour(contour, maxContour)) {
-      // console.log(`Contour ${i} skipped: Touches the plate or is the plate.`);
-      continue;
-    }
-
-    // Skip if it's too small or large
-    if (area <= colonyAreaMin.value || area >= colonyAreaMax.value) {
-      // console.log(`Contour ${i} skipped: Out of area range.`);
-      continue;
-    }
-
-    // Approximate the contour to check if it's circular
-    let epsilon = 0.02 * cv.arcLength(contour, true); // Approximation accuracy
-    let approx = new cv.Mat();
-    cv.approxPolyDP(contour, approx, epsilon, true);
-
-    // If the approximation has fewer than 6 vertices, it's likely a circle
-
-    // Draw the contour for visualization
-    let color = new cv.Scalar(0, 255, 0); // Green for colonies
-    cv.drawContours(
-      resizedSrc,
-      contours,
-      i,
-      color,
-      2,
-      cv.LINE_8,
-      hierarchy,
-      100
-    );
-    colonyCount++;
-  }
-
-  // Update colony count
-  // colonyCountElement.textContent = `Colony Count: ${colonyCount}`;
-  displayColonyCount(colonyCount);
-
-  // Display processed image
-  cv.imshow("processedCanvas", resizedSrc);
-
-  // Clean up resources
-  src.delete();
-  resizedSrc.delete();
-  maskedSrc.delete();
-  mask.delete();
-  processed.delete();
-  contours.delete();
-  hierarchy.delete();
 });
 
 function displayColonyCount(colonyCount) {
@@ -398,7 +377,7 @@ function clearFormAndNumbersAuto() {
   imageUpload.value = "";
   imageContainer.style.display = "none";
   originalCtx.clearRect(0, 0, originalCanvas.width, originalCanvas.height);
-  processedCtx.clearRect(0, 0, processedCanvas.width, processedCanvas.height);
+  // processedCtx.clearRect(0, 0, processedCanvas.width, processedCanvas.height);
 }
 
 document.addEventListener("DOMContentLoaded", () => {

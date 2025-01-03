@@ -100,12 +100,12 @@
       <div class="grid-item">
         <div class="title">Colonies Seen On Plate</div>
         <div class="grid-content">
-          <div class="tabs">
+          <!-- <div class="tabs">
             <div class="tab active" data-target="manual-tab">Manual Count</div>
             <div class="tab" data-target="automated-tab">Automated Count</div>
-          </div>
+          </div> -->
 
-          <div id="manual-tab" class="tab-content active">
+          <!-- <div id="manual-tab" class="tab-content active">
             <svg id="svg" viewBox="0 0 100 100"></svg>
             <div style="display: block; padding: 20px">
               <h2 class="num" id="count-hundreds">0</h2>
@@ -122,13 +122,18 @@
             >
               FINISH COUNT FOR PLATE
             </button>
-          </div>
+          </div> -->
 
           <div id="automated-tab" class="tab-content">
             <div class="container">
               <!-- First Card: Upload Image, Colony Size, and Preprocessing -->
               <div class="section">
                 <div></div>
+                <div id="image-container-cv">
+                  <div class="image-box">
+                    <canvas id="originalCanvas"></canvas>
+                  </div>
+                </div>
                 <form id="auto-plate">
                   <div class="field">
                     <label for="file">Upload Image:</label>
@@ -144,14 +149,49 @@
 
                   <div class="field">
                     <label for="colonyAreaMin">Min Colony Area (px):</label>
-                    <input type="number" id="colonyAreaMin" required />
-
+                    <div class="slider-container">
+                      <div class="value-display">
+                        <div class="current-value" id="currentValueMin">
+                          0 px
+                        </div>
+                      </div>
+                      <input
+                        type="range"
+                        min="0"
+                        max="100"
+                        value="0"
+                        class="slider"
+                        id="colonyAreaMin"
+                      />
+                      <div class="range-limits">
+                        <span>0</span>
+                        <span>100</span>
+                      </div>
+                    </div>
                     <small></small>
                   </div>
 
                   <div class="field">
                     <label for="colonyAreaMax">Max Colony Area (px):</label>
-                    <input type="number" id="colonyAreaMax" required />
+                    <div class="slider-container">
+                      <div class="value-display">
+                        <div class="current-value" id="currentValueMax">
+                          100 px
+                        </div>
+                      </div>
+                      <input
+                        type="range"
+                        min="0"
+                        max="100"
+                        value="100"
+                        class="slider"
+                        id="colonyAreaMax"
+                      />
+                      <div class="range-limits">
+                        <span>0</span>
+                        <span>100</span>
+                      </div>
+                    </div>
 
                     <small></small>
                   </div>
@@ -161,28 +201,18 @@
               <!-- Second Card: Select Plate -->
               <div class="section"></div>
             </div>
-            <div id="image-container-cv">
-              <div class="image-box">
-                <h3>Original</h3>
-                <canvas id="originalCanvas"></canvas>
-              </div>
-              <div class="image-box">
-                <h3>Processed</h3>
-                <canvas id="processedCanvas"></canvas>
-              </div>
-            </div>
+
             <div style="display: block; padding: 20px">
               <h2 class="num" id="count-hundreds-auto">0</h2>
               <h2 class="num" id="count-tens-auto">0</h2>
               <h2 class="num" id="count-ones-auto">0</h2>
             </div>
-            <button class="blue-btn" id="processButton">PROCESS IMAGE</button>
             <button
-              class="green-btn"
+              class="blue-btn"
               id="save-btn"
               onclick="createPlateObjectAuto()"
             >
-              FINISH COUNT FOR PLATE
+              SUBMIT PLATE
             </button>
           </div>
         </div>
@@ -205,33 +235,13 @@
               <option value="scatter">Scatter</option>
             </select>
           </div>
-          <button class="blue-btn" onclick="plotData()">PLOT</button>
         </div>
       </div>
     </div>
   </body>
-  <script>
-    // Tab switching logic
-    const tabs = document.querySelectorAll(".tab");
-    const tabContents = document.querySelectorAll(".tab-content");
 
-    tabs.forEach((tab) => {
-      tab.addEventListener("click", () => {
-        // Remove active class from all tabs and contents
-        tabs.forEach((t) => t.classList.remove("active"));
-        tabContents.forEach((content) => content.classList.remove("active"));
-
-        // Add active class to clicked tab and corresponding content
-        tab.classList.add("active");
-        const target = document.getElementById(tab.getAttribute("data-target"));
-        target.classList.add("active");
-      });
-    });
-  </script>
   <script src="db.js"></script>
 
-  <script src="analytics.js"></script>
-  <script src="agar.js"></script>
   <script src="nav-bar.js"></script>
   <script src="plot-logic.js"></script>
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>

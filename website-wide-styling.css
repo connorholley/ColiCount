@@ -89,17 +89,14 @@ body {
   }
 
   .tab-content {
-    display: none;
+    display: block;
+
     padding: 20px;
     
  
   }
 
-  .tab-content.active {
-    display: block;
-    
 
-  }
 
   /* Navbar Styles */
 .navbar {

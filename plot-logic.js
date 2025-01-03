@@ -82,3 +82,6 @@ async function plotData() {
   Plotly.react("myPlot", data, layout);
 }
 document.addEventListener("DOMContentLoaded", plotData);
+
+selection.addEventListener("change", plotData);
+typeSelect.addEventListener("change", plotData);
