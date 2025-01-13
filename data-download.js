@@ -200,6 +200,11 @@ async function downloadExcelFile() {
   // Use the existing query_object from visualizePlateObjects
   let dataSet = await getData(query_object); // Await the full data to be fetched
 
+  const cleanedData = dataSet.map((item) => ({
+    ...item, // Keep all existing properties
+    created_at: item.created_at.split("T")[0], // Format just the date field
+  }));
+
   var today = new Date();
   var dd = String(today.getDate()).padStart(2, "0");
   var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
@@ -210,7 +215,7 @@ async function downloadExcelFile() {
 
   try {
     // Convert full data to a worksheet
-    const worksheet = XLSX.utils.json_to_sheet(dataSet);
+    const worksheet = XLSX.utils.json_to_sheet(cleanedData);
 
     // Create a new workbook and append the worksheet
     const workbook = XLSX.utils.book_new();
