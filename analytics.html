@@ -100,30 +100,6 @@
       <div class="grid-item">
         <div class="title">Colonies Seen On Plate</div>
         <div class="grid-content">
-          <!-- <div class="tabs">
-            <div class="tab active" data-target="manual-tab">Manual Count</div>
-            <div class="tab" data-target="automated-tab">Automated Count</div>
-          </div> -->
-
-          <!-- <div id="manual-tab" class="tab-content active">
-            <svg id="svg" viewBox="0 0 100 100"></svg>
-            <div style="display: block; padding: 20px">
-              <h2 class="num" id="count-hundreds">0</h2>
-              <h2 class="num" id="count-tens">0</h2>
-              <h2 class="num" id="count-ones">0</h2>
-            </div>
-            <button class="blue-btn" id="increment-btn" onclick="increment()">
-              INCREMENT
-            </button>
-            <button
-              class="green-btn"
-              id="save-btn"
-              onclick="createPlateObject()"
-            >
-              FINISH COUNT FOR PLATE
-            </button>
-          </div> -->
-
           <div id="automated-tab" class="tab-content">
             <div class="container">
               <!-- First Card: Upload Image, Colony Size, and Preprocessing -->
@@ -131,7 +107,10 @@
                 <div></div>
                 <div id="image-container-cv">
                   <div class="image-box">
-                    <canvas id="originalCanvas"></canvas>
+                    <canvas
+                      style="border-radius: 25px"
+                      id="originalCanvas"
+                    ></canvas>
                   </div>
                 </div>
                 <form id="auto-plate">

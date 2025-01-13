@@ -11,7 +11,6 @@ let countHundredsAuto = document.getElementById("count-hundreds-auto");
 let originalCanvas = document.getElementById("originalCanvas");
 let processedCanvas = document.getElementById("processedCanvas");
 let originalCtx = originalCanvas.getContext("2d");
-// let processedCtx = processedCanvas.getContext("2d");
 let isSelectingPlate = false;
 let isDragging = false;
 let plateCircle = { x: 0, y: 0, radius: 20 }; // Default circle properties
@@ -96,11 +95,6 @@ function preprocessImage(src, method) {
 
 // Function to process image and count colonies
 function processImageAndCountColonies() {
-  if (!plateCircle.radius) {
-    alert("Please select the plate boundaries first.");
-    return;
-  }
-
   if (!auto.checkValidity()) {
     auto.reportValidity();
     return;
@@ -310,6 +304,36 @@ document.getElementById("imageUpload").addEventListener("change", function (e) {
   reader.readAsDataURL(file);
 });
 
+function showNotification(message, type = "success") {
+  // Create notification element
+  const notification = document.createElement("div");
+  notification.className = `notification ${type}`;
+
+  // Create content paragraph
+  const content = document.createElement("p");
+  content.className = "notification-content";
+  content.textContent = message;
+
+  // Add content to notification
+  notification.appendChild(content);
+
+  // Add notification to document
+  document.body.appendChild(notification);
+
+  // Trigger fade in
+  setTimeout(() => {
+    notification.classList.add("show");
+  }, 100);
+
+  // Remove notification after delay
+  setTimeout(() => {
+    notification.classList.remove("show");
+    setTimeout(() => {
+      notification.remove();
+    }, 500);
+  }, 3000);
+}
+
 function displayColonyCount(colonyCount) {
   countOnesAuto.innerText = colonyCount % 10; // Ones place
   countTensAuto.innerText = Math.floor((colonyCount % 100) / 10); // Tens place
@@ -319,15 +343,23 @@ function displayColonyCount(colonyCount) {
 
 function createPlateObjectAuto() {
   const form = document.getElementById("plate-object-form");
+  const imageUpload = document.getElementById("auto-plate");
 
   // Check form validity first
   if (!form.checkValidity()) {
     form.reportValidity();
     return false;
   }
+  if (!imageUpload.checkValidity()) {
+    imageUpload.reportValidity();
+    return false;
+  }
 
-  if (!imageProcessed) {
-    alert("Ensure image has been processed to get proper count");
+  if (!isPlateSelected) {
+    showNotification(
+      "Please select a plate radius on the image before submitting.",
+      "error"
+    );
     return false;
   }
   try {
@@ -341,14 +373,13 @@ function createPlateObjectAuto() {
       colonyCount
     );
 
-    alert(`Plate Object Created Successfully!
-    
-      Scientific Name: ${sciName.value}
-      Temperature: ${temp.value}
-      Pressure: ${pressure.value}
-      Duration: ${duration.value}
-      Nutrition: ${nutrition.value}
-      `);
+    showNotification(`Plate Object Created Successfully!
+
+    Scientific Name: ${sciName.value}
+    Temperature: ${temp.value}
+    Pressure: ${pressure.value}
+    Duration: ${duration.value}
+    Nutrition: ${nutrition.value}`);
 
     // Clear form and reset elements
 

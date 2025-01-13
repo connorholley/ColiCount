@@ -319,3 +319,35 @@ canvas {
 .slider::-moz-range-thumb:hover {
   background: #1F509A;
 }
+
+
+
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 15px;
+  color: white;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+  max-width: 300px;
+}
+
+.notification.success {
+  background-color: #4CAF50;  /* Green */
+}
+
+.notification.error {
+  background-color: #f44336;  /* Red */
+}
+
+.notification.show {
+  opacity: 1;
+}
+
+.notification-content {
+  margin: 0;
+  white-space: pre-line;
+}
